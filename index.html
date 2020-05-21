@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang = "en">
+ <meta charset="utf-8"/>
+  <head>
+    <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap" rel="stylesheet">
+    <title>Teh C</title>
+    <style>
+      body {
+        height: 98vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      .content {
+        width: 70vw;
+        height: 50vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-around;
+      }
+      .options {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .opt {
+        padding: 45px 25px;
+        margin: 20px;
+        border: solid 10px;
+        border-radius: 15px;
+        cursor: pointer;
+      }
+      .opt:hover {
+        box-shadow: 0px 0px 8px 3px #888888;
+      }
+      .selected {
+        box-shadow: 0px 0px 8px 3px #888888;
+      }
+      img {
+        width: 250px;
+      }
+      .title, #drinkname{
+        font-family: 'Indie Flower', cursive;
+        font-size: 3em;
+      }
+      #drinkname {
+        font-size: 3.5em;
+        padding-bottom: 10px;
+      }
+      .bottom {
+        display: flex;
+      }
+      button {
+        font-family: 'Indie Flower', cursive;
+        font-size: 5em;
+        margin: 0px 20px;
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 id = "drinkname">...</h1>
+    <div class = "content">
+      <div>
+      </div>
+      <div class = "options">
+        <div class = "opt" id = "kopi" style="border-color: #0f0b0c" onclick = "changeName(this.id)">
+          <img src = "kopi.svg">
+        </div>
+        <div class = "opt" id = "teh" style="border-color: #CD9C62" onclick = "changeName(this.id)">
+          <img src = "teh.svg">
+        </div>
+      </div>
+      <div class = "bottom">
+        <button id = "prev"><</button>
+        <h1 class = "title">Choose your drink</h1>
+        <button id = "next">></button>
+      </div>
+    </div>
+    <script>
+      function changeName(str) {
+        if (document.getElementById("drinkname").textContent.length <= 4) {
+          document.getElementById("drinkname").textContent = str;
+        }
+        var elems = document.getElementsByClassName("opt");
+        for (var i = 0; i < elems.length; i++) {
+          elems[i].classList.remove("selected");
+        }
+        document.getElementById(str).classList.add("selected");
+      }
+    </script>
+  </body>
+</html>

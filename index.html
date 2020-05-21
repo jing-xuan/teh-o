@@ -3,7 +3,7 @@
  <meta charset="utf-8"/>
   <head>
     <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap" rel="stylesheet">
-    <title>Teh C</title>
+    <title>Teh O</title>
     <style>
       body {
         height: 98vh;
@@ -40,8 +40,9 @@
       }
       img {
         width: 250px;
+        max-height: 250px;
       }
-      .title, #drinkname{
+      #title, #drinkname{
         font-family: 'Indie Flower', cursive;
         font-size: 3em;
       }
@@ -60,37 +61,123 @@
         border: none;
         cursor: pointer;
       }
+      button:disabled {
+        color: #ccc;
+      }
     </style>
   </head>
   <body>
+    <div id = "drink" class = "content">
     <h1 id = "drinkname">...</h1>
-    <div class = "content">
-      <div>
-      </div>
-      <div class = "options">
-        <div class = "opt" id = "kopi" style="border-color: #0f0b0c" onclick = "changeName(this.id)">
-          <img src = "kopi.svg">
+      <div class = "options" id = "drink">
+        <div class = "opt" id = "kopi" style="border-color: #0f0b0c" onclick = "changeName('Kopi'), test(this.id)">
+          <img src = "art/kopi.svg">
         </div>
-        <div class = "opt" id = "teh" style="border-color: #CD9C62" onclick = "changeName(this.id)">
-          <img src = "teh.svg">
+        <div class = "opt" id = "teh" style="border-color: #CD9C62" onclick = "changeName('Teh'), test(this.id)">
+          <img src = "art/teh.svg">
+        </div>
+      </div>
+      <div class = "options" id = "milk">
+        <div class = "opt" id = "nomilk" style="border-color: #0f0b0c" onclick = "changeName(' O'), test(this.id)">
+          <img src = "art/nomilk.svg">
+        </div>
+        <div class = "opt" id = "cmilk" style="border-color: #4C6CC8" onclick = "changeName(''), test(this.id)">
+          <img src = "art/cmilk.svg">
+        </div>
+        <div class = "opt" id = "emilk" style="border-color: #D42D3C" onclick = "changeName(' C'), test(this.id)">
+          <img src = "art/emilk.svg">
+        </div>
+      </div>
+      <div class = "options" id = "sugarlevel">
+        <div class = "opt" id = "nosugar" style="border-color: green" onclick = "changeName(' Kosong'), test(this.id)">
+          <img src = "art/nosugar.svg">
+        </div>
+        <div class = "opt" id = "lsugar" style="border-color: orange" onclick = "changeName(' Siew Dai'), test(this.id)">
+          <img src = "art/lesssugar.svg">
+        </div>
+        <div class = "opt" id = "sugar" style="border-color: tomato" onclick = "changeName(''), test(this.id)">
+          <img src = "art/sugar.svg">
         </div>
       </div>
       <div class = "bottom">
-        <button id = "prev"><</button>
-        <h1 class = "title">Choose your drink</h1>
-        <button id = "next">></button>
+        <button id = "prev" onclick="changeState('prev')"><</button>
+        <h1 id = "title">Choose your drink!</h1>
+        <button id = "next" onclick="changeState('next')">></button>
       </div>
     </div>
     <script>
-      function changeName(str) {
-        if (document.getElementById("drinkname").textContent.length <= 4) {
-          document.getElementById("drinkname").textContent = str;
+      var state = 0;
+      var dname = ["..."];
+      var titletext = ["drink", "milk", "sugar level"];
+      var opts;
+      (function(){
+        opts = document.getElementsByClassName("options");
+        for (var i = 1; i < opts.length; i++) {
+          opts[i].style.display = "none";
         }
+        console.log("hello world");
+        document.getElementById("prev").disabled = 'true';
+        document.getElementById("next").disabled = 'true';
+      }) ();
+      
+      function test(str) {
         var elems = document.getElementsByClassName("opt");
         for (var i = 0; i < elems.length; i++) {
           elems[i].classList.remove("selected");
         }
         document.getElementById(str).classList.add("selected");
+      }
+
+      function changeName(str) {
+        dname[state] = str;
+        document.getElementById("drinkname").textContent = "";
+        for (var i = 0; i < dname.length; i++) {
+          document.getElementById("drinkname").textContent += dname[i];
+        }
+        if (state < 2) {
+          document.getElementById("next").removeAttribute("disabled");
+        }
+      }
+
+      function changeState(str) {
+        if (str == 'next') {
+          state++;
+          dname.push("");
+        }
+        if (str == 'prev') {
+          state--;
+          dname.pop();
+        }
+        if (state == 2) {
+          if (dname[1] == "") {
+            document.getElementById("nosugar").style.display = "none";
+          } else {
+            document.getElementById("nosugar").style.display = "flex"
+            console.log("restore sugar");
+          }
+        }
+        document.getElementById("title").textContent = "Choose your " + titletext[state] + "!";
+        document.getElementById("drinkname").textContent = "";
+        for (var i = 0; i < dname.length; i++) {
+          document.getElementById("drinkname").textContent += dname[i];
+        }
+        if (state > 0) {
+          document.getElementById("prev").removeAttribute("disabled");
+        } else {
+          document.getElementById("prev").disabled = 'true';
+        }
+        for (var i = 0; i < opts.length; i++) {
+          if (i != state) {
+            opts[i].style.display = "none";
+          } else {
+            opts[i].style.display = "flex";            
+          }
+        }
+        if (dname[state] == "")  {
+          document.getElementById("next").disabled = 'true';
+        } else {
+          document.getElementById("next").removeAttribute("disabled");
+        }
       }
     </script>
   </body>

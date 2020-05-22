@@ -32,6 +32,9 @@
         border-radius: 15px;
         cursor: pointer;
       }
+      #final {
+        border: none;
+      }
       .opt:hover {
         box-shadow: 0px 0px 8px 3px #888888;
       }
@@ -42,6 +45,10 @@
         width: 250px;
         height: 250px;
       }
+      #finalimg {
+        width: 300px;
+        height: 300px;
+      }
       #title, #drinkname{
         font-family: 'Indie Flower', cursive;
         font-size: 3em;
@@ -50,7 +57,7 @@
         font-size: 3.5em;
         padding-bottom: 10px;
       }
-      .bottom {
+      #bottom, #move {
         display: flex;
       }
       button {
@@ -64,13 +71,16 @@
       button:disabled {
         color: #ccc;
       }
+      #restart {
+        display: none;
+      }
     </style>
   </head>
   <body>
     <div id = "drink" class = "content">
     <h1 id = "drinkname">...</h1>
       <div class = "options" id = "drink">
-        <div class = "opt" id = "kopi" style="border-color: #0f0b0c" onclick = "changeName('Kopi'), test(this.id)">
+        <div class = "opt" id = "kopi" style="border-color: #694821" onclick = "changeName('Kopi'), test(this.id)">
           <img src = "art/kopi.svg">
         </div>
         <div class = "opt" id = "teh" style="border-color: #CD9C62" onclick = "changeName('Teh'), test(this.id)">
@@ -99,16 +109,34 @@
           <img src = "art/sugar.svg">
         </div>
       </div>
-      <div class = "bottom">
-        <button id = "prev" onclick="changeState('prev')"><</button>
-        <h1 id = "title">Choose your drink!</h1>
-        <button id = "next" onclick="changeState('next')">></button>
+      <div class = "options" id = "temp">
+        <div class = "opt" id = "cold" style="border-color:  #4fc3f7" onclick = "changeName(' Peng'), test(this.id)">
+          <img id = "coldimg" src = "art/tehpeng.svg">
+        </div>
+        <div class = "opt" id = "hot" style="border-color: tomato" onclick = "changeName(''), test(this.id)">
+          <img id = "hotimg" src = "art/teh.svg">
+        </div>
+      </div>
+      <div class = "options" id = "temp">
+        <div class = "opt" id = "final">
+          <img id = "finalimg" src = "art/tehpeng.svg">
+        </div>
+      </div>
+      <div id = "bottom">
+        <div id = "move">
+          <button id = "prev" onclick="changeState('prev')"><</button>
+          <h1 id = "title">Kopi or Teh?</h1>
+          <button id = "next" onclick="changeState('next')">></button>
+        </div>
+        <div id = "restart">
+          <button id = "restartbtn" onclick="changeState('start')">Restart?</button>
+        </div>
       </div>
     </div>
     <script>
       var state = 0;
       var dname = ["..."];
-      var titletext = ["drink", "milk", "sugar level"];
+      var titletext = ["Kopi or Teh?", "Milk?", "Sugar Level?", "Hot or Cold?"];
       var opts;
       (function(){
         opts = document.getElementsByClassName("options");
@@ -119,7 +147,7 @@
         document.getElementById("prev").disabled = 'true';
         document.getElementById("next").disabled = 'true';
       }) ();
-      
+
       function test(str) {
         var elems = document.getElementsByClassName("opt");
         for (var i = 0; i < elems.length; i++) {
@@ -134,12 +162,18 @@
         for (var i = 0; i < dname.length; i++) {
           document.getElementById("drinkname").textContent += dname[i];
         }
-        if (state < 2) {
+        if (state < 4) {
           document.getElementById("next").removeAttribute("disabled");
         }
       }
 
       function changeState(str) {
+        if (str == "start") {
+          state = 0;
+          dname = ["..."];
+          document.getElementById("move").style.display = "flex";
+          document.getElementById("restart").style.display = "none";
+        }
         if (str == 'next') {
           state++;
           dname.push("");
@@ -156,8 +190,37 @@
             console.log("restore sugar");
           }
         }
-        document.getElementById("title").textContent = "Choose your " + titletext[state] + "!";
+        if (state == 3) {
+          if (dname[0] == "Kopi") {
+            document.getElementById("coldimg").src = "art/kopipeng.svg";
+            document.getElementById("hotimg").src = "art/kopi.svg";
+          } else {
+            document.getElementById("coldimg").src = "art/tehpeng.svg";
+            document.getElementById("hotimg").src = "art/teh.svg";
+          }
+        }
+        if (state == 4) {
+          document.getElementById("move").style.display = "none";
+          document.getElementById("restart").style.display = "flex";
+          if (dname[0] == "Kopi") {
+            if (dname[3] == " Peng") {
+              document.getElementById("finalimg").src = "art/kopipeng.svg";
+            } else {
+              document.getElementById("finalimg").src = "art/kopi.svg";
+            }
+          } else {
+            if (dname[3] == " Peng") {
+              document.getElementById("finalimg").src = "art/tehpeng.svg";
+            } else {
+              document.getElementById("finalimg").src = "art/teh.svg";
+            }
+          }
+        }
+        document.getElementById("title").textContent = titletext[state];
         document.getElementById("drinkname").textContent = "";
+        if (state == 4) {
+          document.getElementById("drinkname").textContent = "Your order is ";
+        }
         for (var i = 0; i < dname.length; i++) {
           document.getElementById("drinkname").textContent += dname[i];
         }
@@ -170,7 +233,7 @@
           if (i != state) {
             opts[i].style.display = "none";
           } else {
-            opts[i].style.display = "flex";            
+            opts[i].style.display = "flex";
           }
         }
         if (dname[state] == "")  {

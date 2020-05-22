@@ -238,7 +238,7 @@
             opts[i].style.display = "flex";
           }
         }
-        if (dname[state] == "")  {
+        if (dname[state] == "" || dname[state] == "...")  {
           document.getElementById("next").disabled = 'true';
         } else {
           document.getElementById("next").removeAttribute("disabled");
